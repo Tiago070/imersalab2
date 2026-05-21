@@ -1,0 +1,48 @@
+# Depósitos e Arquivos Temporários
+node_modules/
+npm-debug.log
+yarn-error.log
+*.log
+
+# IDE e Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Variáveis de Ambiente
+.env
+.env.local
+.env.*.local
+
+# Dependências e builds gerados
+/vendor/
+
+# Arquivos gerados pelo Docker/PHP
+docker/php/composer.lock
+
+# Compilações e Builds
+dist/
+build/
+*.min.js
+*.min.css
+
+# Arquivos de Teste
+coverage/
+.nyc_output/
+
+# Backup
+*.bak
+*.backup
+.backup/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Imagens Temporárias (adicione apenas as finais)
+assets/img/*.psd
+assets/360/*.blend

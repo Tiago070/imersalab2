@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Visualizador 360° do ambiente">
+    <meta name="keywords" content="360, visualizador, virtual reality, vr">
+    <meta name="author" content="Tiago Cardoso Ferreira">
+    
+    <title>Visualizador 360° - ImersaLab</title>
+    <link rel="icon" type="image/png" href="https://res.cloudinary.com/duay00cii/image/upload/v1773409785/LogoImmersIFCeres_ctene7.png">
+    
+    <!-- A-Frame (WebXR Framework) -->
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/viewer.css">
+
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="spinner"></div>
+        <p class="loading-text">Carregando ambiente 360°...</p>
+    </div>
+
+    <!-- Visualizador 360° -->
+    <div id="viewer-container">
+        <a-scene id="scene" vr-mode-ui="enabled: true" renderer="antialias: true; colorManagementConfiguration: legacy;">
+            <!-- Câmera -->
+            <!-- Adiciona cursor de mouse e raycaster para detectar interseções com elementos .hotspot e .vr-ui -->
+            <a-camera id="camera" position="0 1.6 0" look-controls="reverseMouseDrag: false" cursor="rayOrigin: mouse" raycaster="objects: .hotspot, .vr-ui">
+                <!-- Painel VR ancorado à câmera (fica visível em VR quando ativado) -->
+                <a-entity id="vr-menu-panel" position="0 -0.4 -1.2" visible="false"></a-entity>
+            </a-camera>
+
+            <!-- VR Controllers for Meta Quest and other WebXR devices -->
+            <a-entity id="laser-left" laser-controls="hand: left" visible="false" raycaster="objects: .hotspot, .vr-ui; showLine: true; far: 30" line="color: #F97316; opacity: 0.8"></a-entity>
+            <a-entity id="laser-right" laser-controls="hand: right" visible="false" raycaster="objects: .hotspot, .vr-ui; showLine: true; far: 30" line="color: #F97316; opacity: 0.8"></a-entity>
+
+            <!-- Imagem 360° (Photosphere) -->
+            <a-sky id="sky" 
+                src="assets/360/lab-informatica-360.jpg" 
+                rotation="0 0 0"
+                alt="Ambiente 360°">
+            </a-sky>
+
+
+            <!-- Hotspot para Voltar: esfera pequena com ícone e rótulo abaixo -->
+            <!-- Posicionado à direita/lado para não interferir com menu -->
+            <a-entity id="hotspot-voltar" position="2 0 -2" visible="false">
+                <!-- Bola pequena clicável -->
+                <a-sphere id="hotspot-bola" class="hotspot" radius="0.25" position="0 0 0" material="color: #DC2626; opacity: 0.95; shader: standard" clickable data-action="sair-vr"
+                    animation__pulse="property: scale; dir: alternate; dur: 1200; loop: true; to: 1.12"/>
+
+                <!-- Ícone de seta dentro da esfera (text colocado levemente à frente) -->
+                <a-text value="←" position="0 0 0.27" align="center" color="#FFFFFF" scale="0.8 0.8 0.8" width="2"></a-text>
+
+                <!-- Texto 'Voltar' abaixo da esfera (interativo separado) -->
+                <!-- Fundo semitransparente para melhorar legibilidade do rótulo -->
+                <a-plane id="hotspot-label-bg" class="hotspot" position="0 -0.6 0.02" width="1.4" height="0.36" color="#000000" opacity="0.45" material="shader: flat" clickable data-action="sair-vr"></a-plane>
+                <!-- Rótulo reduzido e com fonte branca para melhor legibilidade -->
+                <a-text id="hotspot-label" value="Voltar" position="0 -0.6 0.03" align="center" color="#FFFFFF" scale="0.6 0.6 0.6" width="2" wrap-count="12"></a-text>
+            </a-entity>
+        </a-scene>
+
+        <!-- UI Overlay -->
+        <div class="ui-overlay">
+            <!-- Top Bar -->
+            <div class="ui-top">
+                <div class="viewer-top-layout">
+                    <div class="viewer-top-row">
+                        <button id="btn-categorias" class="ui-btn" aria-label="Categorias" title="Categorias">☰</button>
+                        <div class="ui-title" id="title-ambiente">Laboratório de Informática</div>
+                    </div>
+                    <div id="ambientes-menu" class="ambientes-menu" aria-label="Mudar ambiente"></div>
+                </div>
+                <!-- Drawer que mostra as categorias -->
+                <div id="categories-drawer" class="categories-drawer" role="menu" aria-hidden="true"></div>
+                <div class="ui-buttons">
+                    <button class="ui-btn" id="btn-vr" onclick="entrarModoVR()" title="Entrar em Modo VR">
+                        🥽 Modo VR
+                    </button>
+                    <button class="ui-btn" id="btn-voltar" onclick="voltarParaCampus()" title="Voltar para Campus">
+                        ← Voltar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom Info -->
+            <div class="ui-bottom">
+                <div class="ui-info" id="info-texto">
+                    Arraste o mouse ou use seus gestos para explorar. Clique no ponto vermelho para voltar.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dados dos Ambientes -->
+    <script src="js/api-ambientes.js"></script>
+
+        <!-- Script do Visualizador -->
+    <script src="js/viewer.js"></script>
+
+</body>
+</html>

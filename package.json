@@ -1,0 +1,35 @@
+{
+  "name": "imersalab",
+  "version": "1.0.0",
+  "description": "Tecnologias Imersivas para Divulgação Científica e Educacional - IF Goiano Campus Ceres",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server",
+    "dev": "http-server -c-1",
+    "build": "echo 'No build step required for static sites'",
+    "test": "echo 'Run your tests here'",
+    "lint": "echo 'Run your linter here'",
+    "deploy": "echo 'Deploy to GitHub Pages: git push origin main'"
+  },
+  "keywords": [
+    "tour-virtual",
+    "360",
+    "realidade-virtual",
+    "educacao",
+    "tecnologia-imersiva",
+    "divulgacao-cientifica"
+  ],
+  "author": "Tiago Cardoso Ferreira",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seu-usuario/imersalab.git"
+  },
+  "bugs": {
+    "url": "https://github.com/seu-usuario/imersalab/issues"
+  },
+  "homepage": "https://seu-usuario.github.io/imersalab",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

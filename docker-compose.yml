@@ -1,0 +1,67 @@
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - '80:80'
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - .:/var/www/html:ro
+    depends_on:
+      - php-app
+    networks:
+      - imersalab_network
+
+  php-app:
+    build: ./docker/php
+    expose:
+      - '80'
+    volumes:
+      - .:/var/www/html
+    env_file:
+      - .env
+    depends_on:
+      - mysql-db
+    networks:
+      - imersalab_network
+
+  mysql-db:
+    image: mysql:8.0
+    expose:
+      - '3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    networks:
+      - imersalab_network
+
+  ftp-server:
+    image: stilliard/pure-ftpd
+    ports:
+      - '21:21'
+      - '30000-30009:30000-30009'
+    volumes:
+      - uploads_vol:/home/ftpuser/uploads
+    environment:
+      PUBLICHOST: localhost
+      FTP_USER_NAME: ${FTP_USER}
+      FTP_USER_PASS: ${FTP_PASS}
+      FTP_USER_HOME: /home/ftpuser
+    networks:
+      - imersalab_network
+
+volumes:
+  db_data:
+  uploads_vol:
+
+networks:
+  imersalab_network:
+    driver: bridge
+
+# Test command:
+# docker-compose run --rm php-app ./vendor/bin/phpunit tests/
