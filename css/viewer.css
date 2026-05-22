@@ -1,0 +1,299 @@
+/* Extracted from viewer.html */
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #1F2937;
+            overflow: hidden;
+        }
+
+        a-scene {
+            width: 100%;
+            height: 100vh;
+        }
+
+        #viewer-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        /* UI Overlay */
+        .ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .ui-top {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            pointer-events: auto;
+            z-index: 11;
+        }
+
+        .ui-title {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .viewer-top-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .viewer-top-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        /* Menu de navegação de ambientes (baixo do título) */
+        .ambientes-menu {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            overflow-x: auto;
+            max-width: 65vw;
+            padding-bottom: 4px;
+        }
+
+        .ambiente-btn {
+            background: rgba(255,255,255,0.06);
+            color: #F1F5F9;
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .ambiente-btn.active {
+            background: rgba(249,115,22,0.95);
+            color: #FFFFFF;
+            border-color: #F97316;
+            box-shadow: 0 6px 18px rgba(249,115,22,0.18);
+        }
+
+        /* Drawer de categorias (menu sanduiche) */
+        .categories-drawer {
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            background: rgba(31,41,55,0.95);
+            padding: 10px;
+            border-radius: 8px;
+            max-height: 60vh;
+            overflow: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.06);
+            z-index: 20;
+            display: none;
+            min-width: 220px;
+        }
+
+        .categories-drawer.open { display: block; }
+
+        .category-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            background: transparent;
+            color: #F1F5F9;
+            border: none;
+            padding: 8px 6px;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .category-btn:hover { background: rgba(255,255,255,0.02); }
+
+        /* Thumbnail dentro do botão de ambiente */
+        .ambiente-thumb {
+            width: 36px;
+            height: 24px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid rgba(0,0,0,0.25);
+            flex: 0 0 auto;
+        }
+
+        .ambiente-label { padding-left: 8px; font-size: 12px; }
+
+        /* Scrollbar styling for ambientes-menu (horizontal) */
+        .ambientes-menu {
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.08) transparent;
+        }
+        .ambientes-menu::-webkit-scrollbar { height: 8px; }
+        .ambientes-menu::-webkit-scrollbar-track { background: transparent; }
+        .ambientes-menu::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.06);
+            border-radius: 6px;
+        }
+        .ambientes-menu::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.12);
+        }
+
+        /* Scrollbar for categories drawer (vertical) */
+        .categories-drawer {
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.06) transparent;
+        }
+        .categories-drawer::-webkit-scrollbar { width: 8px; }
+        .categories-drawer::-webkit-scrollbar-track { background: transparent; }
+        .categories-drawer::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+        }
+        .categories-drawer::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.12);
+        }
+
+        .ui-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .ui-btn {
+            background-color: rgba(31, 41, 55, 0.8);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 300ms ease-in-out;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .ui-btn:hover {
+            background-color: rgba(249, 115, 22, 0.9);
+            border-color: #F97316;
+        }
+
+        .ui-btn.secondary {
+            background-color: rgba(249, 115, 22, 0.8);
+        }
+
+        .ui-btn.secondary:hover {
+            background-color: #EA580C;
+        }
+
+        .ui-bottom {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            pointer-events: auto;
+            flex-wrap: wrap;
+        }
+
+        .ui-info {
+            background-color: rgba(31, 41, 55, 0.9);
+            color: #F1F5F9;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            max-width: 400px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #1F2937;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .loading-screen.hidden {
+            display: none;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(249, 115, 22, 0.3);
+            border-top-color: #F97316;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .ui-title {
+                font-size: 16px;
+            }
+
+            .ui-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .ui-info {
+                font-size: 12px;
+                max-width: 90%;
+                padding: 12px;
+            }
+        }
+
+        /* Acessibilidade */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
